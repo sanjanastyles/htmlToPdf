@@ -1,0 +1,52 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PDFMake</title>
+  </head>
+
+  <body>
+    <div>
+      <h1>HTML to PDF</h1>
+
+      <button onclick="generatePDF()">Download</button>
+      <img src="https://picsum.photos/seed/picsum/200" />
+    </div>
+  </body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.70/pdfmake.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.70/vfs_fonts.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html-to-pdfmake/browser.js"></script>
+  <script>
+    // playground requires you to assign document definition to a variable called dd
+    function generatePDF() {
+      var html = htmlToPdfmake(
+        `
+    <div>
+      <h1>HTML to PDF</h1>
+      <button onclick="generatePDF()">Download</button>
+    </div>
+      `
+      );
+      var ret = htmlToPdfmake(
+        `<img src="https://picsum.photos/seed/picsum/200">`,
+        {
+          imagesByReference: true,
+        }
+      );
+      var docDefinition = {
+        watermark: {
+          text: "test watermark",
+          color: "blue",
+          opacity: 0.3,
+          bold: true,
+          italics: false,
+        },
+
+        content: [html, ret.content],
+        images: ret.images,
+      };
+      pdfMake.createPdf(docDefinition).download();
+    }
+  </script>
+</html>
